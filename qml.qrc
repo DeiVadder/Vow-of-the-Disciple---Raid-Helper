@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>ResonanceCodePage.qml</file>
+        <file>Encounter1Acquisitions.qml</file>
+        <file>Encounter1AcquisitionItem.qml</file>
+        <file>Encounter3Exhibition.qml</file>
+        <file>GlyphSelection.qml</file>
+        <file>Encounter3SelectionArea.qml</file>
+        <file>Encounter4Rhulk.qml</file>
+        <file>GreetingsPage.qml</file>
+    </qresource>
+</RCC>

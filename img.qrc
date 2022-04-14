@@ -1,0 +1,41 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/glyphs/worship.png</file>
+        <file>images/glyphs/worm.png</file>
+        <file>images/glyphs/witness.png</file>
+        <file>images/glyphs/traveler.png</file>
+        <file>images/glyphs/tower.png</file>
+        <file>images/glyphs/stop.png</file>
+        <file>images/glyphs/scorn.png</file>
+        <file>images/glyphs/savathun.png</file>
+        <file>images/glyphs/pyramid.png</file>
+        <file>images/glyphs/neutral.png</file>
+        <file>images/glyphs/love.png</file>
+        <file>images/glyphs/light.png</file>
+        <file>images/glyphs/knowledge.png</file>
+        <file>images/glyphs/kill.png</file>
+        <file>images/glyphs/hive.png</file>
+        <file>images/glyphs/guardian.png</file>
+        <file>images/glyphs/give.png</file>
+        <file>images/glyphs/grief.png</file>
+        <file>images/glyphs/fleet.png</file>
+        <file>images/glyphs/enter.png</file>
+        <file>images/glyphs/earth.png</file>
+        <file>images/glyphs/drink.png</file>
+        <file>images/glyphs/darkness.png</file>
+        <file>images/glyphs/commune.png</file>
+        <file>images/glyphs/black_heart.png</file>
+        <file>images/glyphs/black_garden.png</file>
+        <file>images/glyphs/ascendant_plane.png</file>
+        <file>images/Encounter3Exhibition/Room4.png</file>
+        <file>images/Encounter3Exhibition/Room2.png</file>
+        <file>images/Encounter3Exhibition/Room1.png</file>
+        <file>images/Encounter3Exhibition/Legend.png</file>
+        <file>images/Encounter3Exhibition/Room3.png</file>
+        <file>images/ResonanceCode-SecretRooms/ShortGuide.jpeg</file>
+        <file>images/Encounter1Acquisitions/Encounter1Acquisitions.png</file>
+        <file>images/Encounter4Rhulk/sS35NXv.png</file>
+        <file>images/JhIcon.png</file>
+        <file>images/icon.ico</file>
+    </qresource>
+</RCC>
