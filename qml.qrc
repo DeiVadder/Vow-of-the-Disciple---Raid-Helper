@@ -10,5 +10,6 @@
         <file>Encounter3SelectionArea.qml</file>
         <file>Encounter4Rhulk.qml</file>
         <file>GreetingsPage.qml</file>
+        <file>GlyphNaming.qml</file>
     </qresource>
 </RCC>

@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 import Qt.labs.settings 1.0
 
@@ -10,32 +10,23 @@ Rectangle {
     property int selection2: -1
     property int selection3: -1
 
-    Component.onCompleted: updateSelection()
+    Component.onCompleted:{ /*updateSelection()*/
+        selection1 = settings.acquisitionSelection1
+        selection2 = settings.acquisitionSelection2
+        selection3 = settings.acquisitionSelection3
+    }
 
     Component.onDestruction: {
-        settings.enterSelectedGlyph = enter.selectedGlyph
-        settings.giveSelectedGlyph = give.selectedGlyph
-        settings.griefSelectedGlyph = grief.selectedGlyph
-        settings.stopSelectedGlyph =  stop.selectedGlyph
-        settings.knowledgeSelectedGlyph = knowledge.selectedGlyph
-        settings.drinkSelectedGlyph =  drink.selectedGlyph
-        settings.communeSelectedGlyph = commune.selectedGlyph
-        settings.killSelectedGlyph = kill.selectedGlyph
-        settings.worshipSelectedGlyph =  worship.selectedGlyph
-
+        settings.acquisitionSelection1 = selection1
+        settings.acquisitionSelection2 = selection2
+        settings.acquisitionSelection3 = selection3
     }
 
     Settings{
         id:settings
-        property int enterSelectedGlyph: -1
-        property int giveSelectedGlyph: -1
-        property int griefSelectedGlyph: -1
-        property int stopSelectedGlyph: -1
-        property int knowledgeSelectedGlyph: -1
-        property int drinkSelectedGlyph: -1
-        property int communeSelectedGlyph: -1
-        property int killSelectedGlyph: -1
-        property int worshipSelectedGlyph: -1
+        property int acquisitionSelection1: -1
+        property int acquisitionSelection2: -1
+        property int acquisitionSelection3: -1
     }
 
 
@@ -48,37 +39,14 @@ Rectangle {
             selection3 = glyph
     }
 
-    function updateSelection(){
-        selection1 = -1
-        selection2 = -1
-        selection3 = -1
-
-        if(enter.selectedGlyph >= 0)
-            setFirstSelection(enter.selectedGlyph)
-        if(give.selectedGlyph >= 0){
-            setFirstSelection(give.selectedGlyph)
-        }
-         if(grief.selectedGlyph >= 0){
-            setFirstSelection(grief.selectedGlyph)
-        }
-        if(stop.selectedGlyph >= 0){
-            setFirstSelection(stop.selectedGlyph)
-        }
-        if(knowledge.selectedGlyph >= 0){
-            setFirstSelection(knowledge.selectedGlyph)
-        }
-        if(drink.selectedGlyph >= 0){
-            setFirstSelection(drink.selectedGlyph)
-        }
-        if(commune.selectedGlyph >= 0){
-            setFirstSelection(commune.selectedGlyph)
-        }
-        if(kill.selectedGlyph >= 0){
-            setFirstSelection(kill.selectedGlyph)
-        }
-        if(worship.selectedGlyph >= 0){
-            setFirstSelection(worship.selectedGlyph)
-        }
+    function findFirstUnused() {
+        if(selection1 < 0)
+            return 1;
+        if(selection2 < 0)
+            return 2;
+        if(selection3 < 0)
+            return 3;
+        return 0;
     }
 
     Rectangle{
@@ -96,17 +64,9 @@ Rectangle {
             font.pixelSize: Qt.application.font.pixelSize * 1.6
             text: "Reset"
             onClicked: {
-                enter.selectedGlyph = -1
-                give.selectedGlyph = -1
-                grief.selectedGlyph = -1
-                stop.selectedGlyph = -1
-                knowledge.selectedGlyph = -1
-                drink.selectedGlyph = -1
-                commune.selectedGlyph = -1
-                kill.selectedGlyph = -1
-                worship.selectedGlyph = -1
-
-                updateSelection()
+                selection1 = -1
+                selection2 = -1
+                selection3 = -1
             }
         }
 
@@ -118,40 +78,64 @@ Rectangle {
                 id: glyph1
                 anchors.right: glyph2.left
                 anchors.rightMargin: 5
-                visible: selection1 >= 0
+                opacity: selection1 >= 0 ? 1 : 0.5
                 height: header.height
                 width: height
-                source: selection1 >= 0 ? gSelection.glyphArray[selection1] : ""
+                source: selection1 >= 0 ? gSelection.glyphArray[selection1] : gSelection.glyphArray[17]
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        gSelection.visible = true
+                        gSelection.selectedItem = 1
+                    }
+                }
             }
 
             Image {
                 id: glyph2
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: selection1 >= 0
+                opacity: selection2 >= 0 ? 1 : 0.5
                 height: header.height
                 width: height
-                source: selection2 >= 0 ? gSelection.glyphArray[selection2] : ""
+                source: selection2 >= 0 ? gSelection.glyphArray[selection2] : gSelection.glyphArray[17]
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        gSelection.visible = true
+                        gSelection.selectedItem = 2
+                    }
+                }
             }
 
             Image {
                 id: glyph3
                 anchors.left: glyph2.right
                 anchors.leftMargin: 5
-                visible: selection1 >= 0
+                opacity: selection3 >= 0 ? 1 : 0.5
+
                 height: header.height
                 width: height
-                source: selection3 >= 0 ? gSelection.glyphArray[selection3] : ""
+                source: selection3 >= 0 ? gSelection.glyphArray[selection3] : gSelection.glyphArray[17]
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        gSelection.visible = true
+                        gSelection.selectedItem = 3
+                    }
+                }
             }
 
             Text {
                 anchors.fill: parent
-                text: qsTr("Select glyphs by clicking on their room")
+                text: qsTr("Select glyphs by clicking on one of the symbols")
                 wrapMode: Text.WordWrap
                 font.pixelSize: 18
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-
-                visible: !glyph1.visible && !glyph2.visible && !glyph3.visible
+                visible: glyph1.opacity != 1 && glyph2.opacity != 1 && glyph3.opacity != 1
             }
         }
 
@@ -181,10 +165,9 @@ Rectangle {
 
                 originalSource: 7
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.enterSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 0
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -195,10 +178,9 @@ Rectangle {
 
                 originalSource: 9
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.giveSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 1
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -209,10 +191,9 @@ Rectangle {
 
                 originalSource: 10
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.griefSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 2
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -223,10 +204,9 @@ Rectangle {
 
                 originalSource: 21
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.stopSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 3
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -237,10 +217,9 @@ Rectangle {
 
                 originalSource: 14
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.knowledgeSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 4
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -251,10 +230,9 @@ Rectangle {
 
                 originalSource: 5
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.drinkSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 5
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -265,10 +243,9 @@ Rectangle {
 
                 originalSource: 3
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.communeSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 6
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -279,10 +256,9 @@ Rectangle {
 
                 originalSource: 13
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.killSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 7
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -293,10 +269,9 @@ Rectangle {
 
                 originalSource: 26
                 selectionArray: gSelection.glyphArray
-                selectedGlyph: settings.worshipSelectedGlyph
                 onClicked: {
                     gSelection.visible = true
-                    gSelection.selectedItem = 8
+                    gSelection.selectedItem = findFirstUnused()
                 }
             }
 
@@ -312,19 +287,12 @@ Rectangle {
 
         onGlypSelected: {
             switch(selectedItem){
-            case 0: enter.selectedGlyph = glyp; break;
-            case 1: give.selectedGlyph = glyp; break;
-            case 2: grief.selectedGlyph = glyp; break;
-            case 3: stop.selectedGlyph = glyp; break;
-            case 4: knowledge.selectedGlyph = glyp; break;
-            case 5: drink.selectedGlyph = glyp; break;
-            case 6: commune.selectedGlyph = glyp; break;
-            case 7: kill.selectedGlyph = glyp; break;
-            case 8: worship.selectedGlyph = glyp; break;
+            case 1: selection1 = glyp; break;
+            case 2: selection2 = glyp; break;
+            case 3: selection3 = glyp; break;
             }
-            gSelection.visible = false
 
-            updateSelection()
+            gSelection.visible = false
         }
     }
 }

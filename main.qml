@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 ApplicationWindow {
     id: window
@@ -9,6 +9,7 @@ ApplicationWindow {
     title: qsTr("VOW OF THE DISCIPLE Helper App")
 
     header: ToolBar {
+        id:mainHeader
         contentHeight: toolButton.implicitHeight
 
         ToolButton {
@@ -17,17 +18,30 @@ ApplicationWindow {
             font.pixelSize: Qt.application.font.pixelSize * 1.6
             onClicked: {
                 drawer.open()
-//                if (stackView.depth > 1) {
-//                    stackView.pop()
-//                } else {
-//                    drawer.open()
-//                }
             }
         }
 
         Label {
-//            text: stackView.currentItem.title
+
             anchors.centerIn: parent
+        }
+
+        Image {
+            id: glyphNaming
+            anchors{
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+                margins: parent.height / 8
+            }
+            width: height
+
+
+            source: "qrc:/images/glyphs/neutral.png"
+            MouseArea{
+                anchors.fill: parent
+                onClicked: drawerGlyphNaming.position != 0 ? drawerGlyphNaming.close() : drawerGlyphNaming.open()
+            }
         }
     }
 
@@ -99,6 +113,17 @@ ApplicationWindow {
             }
 
             ItemDelegate{
+                text: qsTr("Glyphs")
+                width: parent.width
+                onClicked: {
+                    drawer.close()
+                    drawerGlyphNaming.open()
+//                    stackView.pop(null)
+//                    stackView.push("qrc:/GlyphNaming.qml")
+                }
+            }
+
+            ItemDelegate{
                 text: qsTr("Settings")
                 width: parent.width
                 enabled: false
@@ -106,6 +131,20 @@ ApplicationWindow {
                     drawer.close()
                 }
             }
+        }
+    }
+
+    Drawer{
+        id:drawerGlyphNaming
+        width: window.width
+        height: window.height - mainHeader.height
+        y: mainHeader.height
+
+        edge: Qt.RightEdge
+
+        GlyphNaming{
+            anchors.fill:parent
+
         }
     }
 
